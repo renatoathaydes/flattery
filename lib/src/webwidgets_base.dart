@@ -1,17 +1,28 @@
 import 'dart:html';
 
+/// A Widget is a simple abstraction around a HTML [Element].
+///
+/// It makes it possible to create user interfaces declaratively, using Dart.
 mixin Widget {
   Element _root;
   bool _attached;
 
+  /// Get the root [Element] of this [Widget].
   Element get root;
 
+  /// Returns whether this [Widget] is attached to the DOM.
   bool get isAttached => _attached;
 
+  /// Callback invoked when the Widget is attached to the DOM.
   void onAttached() {}
 
+  /// Callback invoked when the Widget is removed from the DOM.
   void onDetached() {}
 
+  /// Append this Widget to the given [Element].
+  ///
+  /// By default, the root of this [Widget] is appended to a host div inside
+  /// the shadow DOM of the parent [Element].
   void appendTo(Element parent, {bool useShadowDom = true}) {
     remove();
 
@@ -29,6 +40,9 @@ mixin Widget {
     parent.append(attachedElement);
   }
 
+  /// Remove this [Widget] from its parent.
+  ///
+  /// If this Widget has not been appended to a parent, nothing occurs.
   void remove() {
     if (_root == null) {
       return;
