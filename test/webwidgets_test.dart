@@ -2,12 +2,13 @@ import 'dart:html';
 
 @TestOn('browser')
 import 'package:test/test.dart';
+import 'package:webwidgets/src/widgets.dart';
 
 _setupUI() {
-  final content = querySelector('#output');
-  content.append(DivElement()
-    ..id = 'hello'
-    ..text = 'Hey there');
+  TextBox.create()
+    ..root.id = 'hello'
+    ..text = 'Hey there'
+    ..appendTo(querySelector('#output'), useShadowDom: false);
 }
 
 main() async {
@@ -15,9 +16,9 @@ main() async {
 
   group('Simple Widget', () {
     test('can be added to a HTML document', () async {
-      // TODO
       final helloEl = document.getElementById('hello');
-      expect(helloEl?.text, equals('Hey there'));
+      expect(helloEl, isA<DivElement>());
+      expect(helloEl.text, equals('Hey there'));
     });
   });
 }

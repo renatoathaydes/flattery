@@ -27,6 +27,12 @@ main() {
 pub get
 ```
 
+### Run the example
+
+```
+webdev serve example
+```
+
 ### Running the tests
 
 ```
