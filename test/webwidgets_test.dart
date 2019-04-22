@@ -1,6 +1,6 @@
+@TestOn('browser')
 import 'dart:html';
 
-@TestOn('browser')
 import 'package:test/test.dart';
 import 'package:webwidgets/basic_widgets.dart';
 
