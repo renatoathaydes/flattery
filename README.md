@@ -35,6 +35,14 @@ webdev serve example
 
 ### Running the tests
 
+Unit tests:
+
+```
+pub run build_runner test
+```
+
+Browser tests:
+
 ```
 pub run build_runner test -- -p chrome
 ```
