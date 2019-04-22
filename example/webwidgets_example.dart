@@ -25,12 +25,11 @@ class TextCountForm extends TextCount with Widget, ShadowWidget {
   final _textInput = InputElement(type: 'text')..name = 'text';
   final _countInput = InputElement(type: 'number')..name = 'count';
 
-  TextCountForm(TextCount model) : super(model.text, model.count) {
+  TextCountForm() : super('', 0) {
     _countInput.onKeyUp.listen(_onCountChange);
     _textInput.onKeyUp.listen(_onTextChange);
-    _updateCount(count);
-    text = model.text;
-    stylesheet = '.error { color: red; } '
+    stylesheet = //
+        '.error { color: red; } '
         '.box { padding: 0.2em; border: solid 1px gray; margin: 0.1em; }';
   }
 
@@ -111,7 +110,13 @@ main() {
   // model.
   // We could pass on the form to other UI components with type TextBoxModel,
   // so they wouldn't even know they are updating a view, not just the model.
-  final form = TextCountForm(TextCount('Webwidgets!', 5));
+  TextCount form = TextCountForm();
+
+  // here, we can use the form as a simple TextCount instance!
+  // All updates will be immediately visible in the view.
+  form
+    ..text = 'WebWidgets!'
+    ..count = 5;
 
   // create the UI
   querySelector('#output').append(ContainerWidget(children: [

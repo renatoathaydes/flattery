@@ -17,8 +17,7 @@ body {
     min-height: 30em;
 }
 
-// does not apply to the boxes in the TextBoxForm because they are within a Widget,
-// which by default creates a root Element within a shadow DOM.
+// does not apply to the boxes inside the ShadowWidget!
 .box {
     color: red;
 }
