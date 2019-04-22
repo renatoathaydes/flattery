@@ -16,10 +16,6 @@ class TextCount {
 /// The text is shown in small boxes, of which there's as many as the 'count'
 /// value of the [TextCount].
 class TextBoxForm extends TextCount with Widget {
-  final root = DivElement()
-    ..classes.add('text-box-form')
-    ..append(StyleElement()..text = '.error { color: red; }');
-
   final _errorBox = TextBox()..root.classes.add('error');
   final _boxes = ContainerWidget<SpanElement>(rootFactory: flexBox);
   final _timeBox = TextBox();
@@ -29,22 +25,25 @@ class TextBoxForm extends TextCount with Widget {
   TextBoxForm(TextCount model) : super(model.text, model.count) {
     _countInput.onKeyUp.listen(_onCountChange);
     _textInput.onKeyUp.listen(_onTextChange);
-
-    ContainerWidget(children: [
-      inputWidget(_textInput, 'Text:'),
-      inputWidget(_countInput, 'Number of Widgets to display:'),
-      _errorBox,
-      button('Reset', _onReset),
-      lineBreak(),
-      _timeBox,
-      lineBreak()..style.minHeight = '20px',
-      _boxes
-    ], rootFactory: flexBox)
-        .appendTo(root);
-
     _updateCount(count);
     text = model.text;
   }
+
+  @override
+  Element build() => ContainerWidget(
+        children: [
+          inputWidget(_textInput, 'Text:'),
+          inputWidget(_countInput, 'Number of Widgets to display:'),
+          _errorBox,
+          button('Reset', _onReset),
+          lineBreak(),
+          _timeBox,
+          lineBreak()..style.minHeight = '20px',
+          _boxes
+        ],
+        rootFactory: flexBox,
+      ).root
+        ..classes.add('text-box-form');
 
   set text(String text) {
     super.text = text;
@@ -109,14 +108,16 @@ main() {
   // so they wouldn't even know they are updating a view, not just the model.
   final form = TextBoxForm(TextCount('Webwidgets!', 5));
 
+  //..append(StyleElement()..text = '.error { color: red; }')
+
   // create the UI
-  ContainerWidget(children: [
+  querySelector('#output').append(ContainerWidget(children: [
     largeTextBox('Webwidgets Demo (this is a TextBox)'),
     htmlText('<p>This is a little performance test for Webwidgets...</p>'
         '<p>You can insert a lot of widgets to this page and check how '
         'long it takes!</p><p>The widgets will all mirror the text you enter</p>'),
     form,
-  ]).appendTo(querySelector('#output'));
+  ]).root);
 }
 
 // some helper functions to create simple custom Widgets

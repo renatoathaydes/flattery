@@ -10,8 +10,8 @@ main() async {
     setUp(() {
       textBox = TextBox()
         ..root.id = 'hello'
-        ..text = 'Hey there'
-        ..appendTo(querySelector('#output'), useShadowDom: false);
+        ..text = 'Hey there';
+      querySelector('#output').append(textBox.root);
     });
 
     test('can be added to a HTML document, then removed', () {
@@ -37,32 +37,29 @@ main() async {
           ..root.id = 'bye'
           ..text = 'Second child'
       ])
-        ..root.id = 'container-element'
-        ..appendTo(querySelector('#output'), useShadowDom: false);
+        ..root.id = 'container-element';
+      querySelector('#output').append(container.root);
     });
 
     test('can be added to a HTML document, then removed', () {
-      var contEl = document.getElementById(container.root.id);
+      var contEl = document.getElementById(container.id);
       expect(contEl, isA<DivElement>());
       expect(contEl.children, hasLength(2));
 
-      final Widget firstChild = container[0];
-      final Widget secondChild = container[1];
+      final firstChild = container[0] as TextBox;
+      final secondChild = container[1] as TextBox;
 
-      expect(firstChild.root.id, equals('hello'));
-      expect(secondChild.root.id, equals('bye'));
-
-      expect(firstChild, isA<TextBox>());
-      expect(secondChild, isA<TextBox>());
+      expect(firstChild.id, equals('hello'));
+      expect(secondChild.id, equals('bye'));
 
       expect(firstChild.root.attributes[idAttribute], isNotNull);
       expect(secondChild.root.attributes[idAttribute], isNotNull);
 
       container.removeFromDom();
 
-      expect(document.getElementById(container.root.id), isNull);
-      expect(document.getElementById(firstChild.root.id), isNull);
-      expect(document.getElementById(secondChild.root.id), isNull);
+      expect(document.getElementById(container.id), isNull);
+      expect(document.getElementById(firstChild.id), isNull);
+      expect(document.getElementById(secondChild.id), isNull);
     });
 
     test('allows widgets to be added and removed', () {
@@ -70,11 +67,11 @@ main() async {
         ..root.id = 'new-box'
         ..text = 'new box');
 
-      var contEl = document.getElementById(container.root.id);
+      var contEl = document.getElementById(container.id);
       expect(contEl, isA<DivElement>());
       expect(contEl.children, hasLength(3));
 
-      final newChild = container[2];
+      final newChild = container[2] as TextBox;
 
       expect(newChild.root.id, equals('new-box'));
       expect(newChild.text, equals('new box'));
@@ -82,13 +79,13 @@ main() async {
 
       container.remove(newChild);
 
-      expect(document.getElementById(newChild.root.id), isNull);
-      expect(document.getElementById(container.root.id), isNotNull);
+      expect(document.getElementById(newChild.id), isNull);
+      expect(document.getElementById(container.id), isNotNull);
 
       container.removeFromDom();
 
-      expect(document.getElementById(newChild.root.id), isNull);
-      expect(document.getElementById(container.root.id), isNull);
+      expect(document.getElementById(newChild.id), isNull);
+      expect(document.getElementById(container.id), isNull);
     });
 
     test('allows widgets to be inserted at first index and removed', () {
@@ -96,31 +93,31 @@ main() async {
         ..root.id = 'first-box'
         ..text = 'first box';
 
-      var contEl = document.getElementById(container.root.id);
+      var contEl = document.getElementById(container.id);
       expect(contEl, isA<DivElement>());
       expect(contEl.children, hasLength(2));
 
-      final newChild = container[0];
+      final newChild = container[0] as TextBox;
 
-      expect(newChild.root.id, equals('first-box'));
+      expect(newChild.id, equals('first-box'));
       expect(newChild.text, equals('first box'));
       expect(newChild.root.attributes[idAttribute], isNotNull);
 
-      var secondChild = container[1];
+      var secondChild = container[1] as TextBox;
       expect(secondChild.root.id, equals('bye'));
 
       container.removeAt(0);
 
-      expect(document.getElementById(newChild.root.id), isNull);
-      expect(document.getElementById(container.root.id), isNotNull);
+      expect(document.getElementById(newChild.id), isNull);
+      expect(document.getElementById(container.id), isNotNull);
 
-      secondChild = container[0];
+      secondChild = container[0] as TextBox;
       expect(secondChild.root.id, equals('bye'));
 
       container.removeFromDom();
 
-      expect(document.getElementById(newChild.root.id), isNull);
-      expect(document.getElementById(container.root.id), isNull);
+      expect(document.getElementById(newChild.id), isNull);
+      expect(document.getElementById(container.id), isNull);
     });
 
     test('allows untyped objects to be inserted at any index and removed', () {
@@ -132,7 +129,7 @@ main() async {
         DivElement()..id = 'div-0'
       ]);
 
-      var contEl = document.getElementById(container.root.id);
+      var contEl = document.getElementById(container.id);
       expect(contEl, isA<DivElement>());
       expect(contEl.children, hasLength(7));
 
@@ -187,7 +184,7 @@ main() async {
 
       container.removeFromDom();
 
-      expect(document.getElementById(container.root.id), isNull);
+      expect(document.getElementById(container.id), isNull);
     });
   });
 }

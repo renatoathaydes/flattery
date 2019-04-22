@@ -9,117 +9,46 @@ Widget widget(Element element) => _BasicWidget(element);
 ///
 /// It makes it possible to create user interfaces declaratively, using Dart.
 mixin Widget {
-  Element _root;
-  bool _attached;
+  Element _rootRef;
 
-  /// Get the root [Element] of this [Widget].
+  /// Build the root [Element] of this [Widget].
+  Element build();
+
+  /// Remove this [Widget] from the DOM.
   ///
-  /// The getter is only called when the [Widget] is added to the DOM.
-  /// Implementations are free to choose whether to always return the same
-  /// instance, or a new one every time.
-  Element get root;
-
-  /// Returns whether this [Widget] is attached to the DOM.
-  bool get isAttached => _attached;
-
-  /// Callback invoked when the Widget is attached to the DOM.
-  void onAttached() {}
-
-  /// Callback invoked when the Widget is removed from the DOM.
-  void onDetached() {}
-
-  /// Append this Widget to the given [Element].
-  ///
-  /// By default, the root of this [Widget] is appended to a host div inside
-  /// the shadow DOM of the parent [Element].
-  ///
-  /// Returns the attached [Element].
-  Element appendTo(Element parent, {bool useShadowDom = true}) {
-    Element elementToAttach = _prepareToAttach(parent, useShadowDom);
-    parent.append(elementToAttach);
-    return elementToAttach;
-  }
-
-  /// Set this Widget as the [index]th child of the given parent [Element].
-  ///
-  /// By default, the root of this [Widget] is appended to a host div inside
-  ///  the shadow DOM of the parent [Element].
-  ///
-  /// Returns the attached [Element].
-  Element setAt(Element parent, int index, {bool useShadowDom = true}) {
-    // this will remove the element from the DOM if it was already present,
-    // preparing it to be added again... in case the old parent was the same as
-    // the new parent, we need to re-insert the element, otherwise, just set
-    // it at the requested index.
-    final currentChildren = parent.children.length;
-    Element elementToAttach = _prepareToAttach(parent, useShadowDom);
-    final wasSameParentBefore = parent.children.length == currentChildren - 1;
-    if (wasSameParentBefore) {
-      parent.children.insert(index, elementToAttach);
-    } else {
-      parent.children[index] = elementToAttach;
-    }
-    return elementToAttach;
-  }
-
-  /// Remove this [Widget] from its parent.
-  ///
-  /// If this Widget has not been appended to a parent, nothing occurs.
+  /// This call is ignored if the [Widget] is not attached to the DOM.
   void removeFromDom() {
-    if (_root == null) {
-      return;
-    }
-
-    if (_root.parentNode is ShadowRoot) {
-      final shadowRoot = _root.parentNode as ShadowRoot;
-      shadowRoot.host.remove();
-    } else {
-      _root.remove();
-    }
+    _rootRef?.remove();
   }
 
-  _observe(Element parent, Element host) {
-    MutationObserver observer;
-    observer = MutationObserver((changes, obs) {
-//      print("Detected changes: "
-//          "${changes.map((c) => "${c.type}: ADD ${c.addedNodes}, DEL ${c.removedNodes}").toList()}");
-      for (MutationRecord change in changes) {
-        if (change.addedNodes.contains(host)) {
-          _attached = true;
-          onAttached();
-        } else if (change.removedNodes.contains(host)) {
-          _attached = false;
-          observer.disconnect();
-          onDetached();
-        }
-      }
-    });
+  /// The ID of this [Widget].
+  String get id => _rootRef?.id ?? "";
 
-    observer.observe(parent, childList: true);
-  }
-
-  Element _prepareToAttach(Element parent, bool useShadowDom) {
-    removeFromDom();
-
-    _root = root;
-
-    Element elementToAttach;
-    if (useShadowDom) {
-      final host = DivElement()..classes.add('widget-host');
-      host.attachShadow({'mode': 'open'}).append(_root);
-      elementToAttach = host;
-    } else {
-      elementToAttach = _root;
+  /// The root of this element.
+  ///
+  /// Accessing the root may cause the [build] method to be invoked if it
+  /// had not been invoked yet.
+  ///
+  /// The [Element] returned by this getter is not necessarily the same as the
+  /// one created by the [build] method - subtypes are free to override it,
+  /// but when this [Widget] is attached to the DOM, this is the [Element] that
+  /// should be used.
+  Element get root {
+    if (_rootRef == null) {
+      _rootRef = build();
+      assert(_rootRef != null, "build() cannot return null");
     }
-    _observe(parent, elementToAttach);
-    return elementToAttach;
+    return _rootRef;
   }
 }
 
 class _BasicWidget with Widget {
-  final Element root;
+  final Element _element;
 
-  _BasicWidget(this.root);
+  _BasicWidget(this._element);
+
+  @override
+  Element build() => _element;
 }
 
 Element _defaultRoot() => DivElement()..classes.add('container-widget');
@@ -139,20 +68,12 @@ class ContainerWidget<W> extends ListMixin<W> with Widget {
   }
 
   @override
-  Element get root => _root;
+  Element build() => _root;
 
   @override
   void add(W item) {
-    Element element;
-    if (item is Widget) {
-      element = item.appendTo(_root, useShadowDom: false);
-    } else if (item is Element) {
-      element = item;
-      _root.append(item);
-    } else {
-      element = SpanElement()..text = item?.toString() ?? "";
-      _root.append(element);
-    }
+    Element element = _asElement(item);
+    _root.append(element);
     _store(element, item);
   }
 
@@ -163,21 +84,23 @@ class ContainerWidget<W> extends ListMixin<W> with Widget {
 
   @override
   void operator []=(int index, W item) {
+    // this will remove the element from the DOM if it was already present...
+    // in case the element being added is already a child of this root,
+    // we need to insert the element, otherwise, just set
+    // it at the requested index.
     final oldElement = _getElementAt(index);
-    Element element;
-    if (item is Widget) {
-      element = item.setAt(_root, index, useShadowDom: false);
-    } else if (item is Element) {
-      element = item;
-      _root.children[index] = element;
+    final element = _asElement(item);
+    bool isChild = element.parent == _root;
+    element.remove();
+    if (isChild) {
+      _root.children.insert(index, element);
     } else {
-      element = SpanElement()..text = (item?.toString() ?? "");
       _root.children[index] = element;
     }
-    _store(element, item);
     if (oldElement != null) {
       _itemById.remove(oldElement.getAttribute(idAttribute));
     }
+    _store(element, item);
   }
 
   @override
@@ -199,10 +122,11 @@ class ContainerWidget<W> extends ListMixin<W> with Widget {
   @override
   set length(int newLength) {
     if (newLength > length) {
-      throw Exception("Cannot increase length of ContainerWidget");
+      throw Exception("Cannot increase length of ContainerWidget without "
+          "adding new items to it.");
     }
     if (newLength < 0) {
-      throw Exception("Cannot set length to negative number");
+      newLength = 0;
     }
     var itemsToRemove = length - newLength;
     while (itemsToRemove > 0) {
@@ -214,6 +138,20 @@ class ContainerWidget<W> extends ListMixin<W> with Widget {
     }
     assert(
         length == newLength, "New length: $newLength, Current length: $length");
+  }
+
+  Element _asElement(item) {
+    switch (item) {
+      case Widget:
+        return item.root;
+    }
+    if (item is Widget) {
+      return item.root;
+    } else if (item is Element) {
+      return item;
+    } else {
+      return SpanElement()..text = item?.toString() ?? "";
+    }
   }
 
   Element _getElementAt(int index) {
