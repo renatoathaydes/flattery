@@ -7,3 +7,4 @@
 library webwidgets;
 
 export 'src/webwidgets_base.dart';
+export 'src/shadow_widget.dart';
