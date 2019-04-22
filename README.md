@@ -38,13 +38,15 @@ webdev serve example
 Unit tests:
 
 ```
-pub run build_runner test
+pub run test
 ```
+
+> Use option `-r json` or `r -expanded` to see details.
 
 Browser tests:
 
 ```
-pub run build_runner test -- -p chrome
+pub run test -p chrome
 ```
 
 ## Features and bugs
