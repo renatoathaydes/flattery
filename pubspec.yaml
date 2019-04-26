@@ -1,6 +1,9 @@
 name: webwidgets
-description: Web Widgets library for building HTML elements using reactive Widgets.
+description: Web Widgets is a library for building HTML elements using reactive Widgets.
 version: 0.1.0
+homepage: https://github.com/renatoathaydes/webwidgets
+repository: https://github.com/renatoathaydes/webwidgets
+issue_tracker: https://github.com/renatoathaydes/webwidgets/issues
 author: Renato Athaydes <renato@athaydes.com>
 
 environment:
