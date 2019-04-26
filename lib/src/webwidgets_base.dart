@@ -11,6 +11,8 @@ Widget widget(Element element) => _BasicWidget(element);
 mixin Widget {
   Element _rootRef;
 
+  CssStyleDeclaration get style => root.style;
+
   /// Build the root [Element] of this [Widget].
   Element build();
 

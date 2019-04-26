@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'webwidgets_base.dart';
+import '../webwidgets_base.dart';
 
 /// A simple text box.
 ///
@@ -8,8 +8,6 @@ import 'webwidgets_base.dart';
 /// on all sides.
 class Text with Widget {
   DivElement _root;
-
-  CssStyleDeclaration get style => root.style;
 
   /// Create a [Text].
   factory Text() {
