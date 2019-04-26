@@ -6,28 +6,28 @@ import 'webwidgets_base.dart';
 ///
 /// By default, it centers its contents and applies a padding of 10px
 /// on all sides.
-class TextBox with Widget {
+class Text with Widget {
   DivElement _root;
 
   CssStyleDeclaration get style => root.style;
 
-  /// Create a [TextBox].
-  factory TextBox() {
+  /// Create a [Text].
+  factory Text() {
     final root = DivElement()
       ..style.textAlign = 'center'
       ..style.overflow = 'hidden'
       ..style.padding = '10px';
-    return TextBox._create(root);
+    return Text._create(root);
   }
 
-  TextBox._create(this._root);
+  Text._create(this._root);
 
   @override
   Element build() => _root;
 
-  /// Get the text of this [TextBox].
+  /// Get the text of this [Text].
   get text => _root.text;
 
-  /// Set the text of this [TextBox].
+  /// Set the text of this [Text].
   set text(String text) => root.text = text;
 }

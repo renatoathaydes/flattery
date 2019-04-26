@@ -6,9 +6,9 @@ import 'package:webwidgets/basic_widgets.dart';
 
 main() async {
   group('Simple Widget', () {
-    TextBox textBox;
+    Text textBox;
     setUp(() {
-      textBox = TextBox()
+      textBox = Text()
         ..root.id = 'hello'
         ..text = 'Hey there';
       querySelector('#output').append(textBox.root);
@@ -30,10 +30,10 @@ main() async {
     Container container;
     setUp(() {
       container = Container(children: [
-        TextBox()
+        Text()
           ..root.id = 'hello'
           ..text = 'First child',
-        TextBox()
+        Text()
           ..root.id = 'bye'
           ..text = 'Second child'
       ])
@@ -46,8 +46,8 @@ main() async {
       expect(contEl, isA<DivElement>());
       expect(contEl.children, hasLength(2));
 
-      final firstChild = container[0] as TextBox;
-      final secondChild = container[1] as TextBox;
+      final firstChild = container[0] as Text;
+      final secondChild = container[1] as Text;
 
       expect(firstChild.id, equals('hello'));
       expect(secondChild.id, equals('bye'));
@@ -63,7 +63,7 @@ main() async {
     });
 
     test('allows widgets to be added and removed', () {
-      container.add(TextBox()
+      container.add(Text()
         ..root.id = 'new-box'
         ..text = 'new box');
 
@@ -71,7 +71,7 @@ main() async {
       expect(contEl, isA<DivElement>());
       expect(contEl.children, hasLength(3));
 
-      final newChild = container[2] as TextBox;
+      final newChild = container[2] as Text;
 
       expect(newChild.root.id, equals('new-box'));
       expect(newChild.text, equals('new box'));
@@ -89,7 +89,7 @@ main() async {
     });
 
     test('allows widgets to be inserted at first index and removed', () {
-      container[0] = TextBox()
+      container[0] = Text()
         ..root.id = 'first-box'
         ..text = 'first box';
 
@@ -97,13 +97,13 @@ main() async {
       expect(contEl, isA<DivElement>());
       expect(contEl.children, hasLength(2));
 
-      final newChild = container[0] as TextBox;
+      final newChild = container[0] as Text;
 
       expect(newChild.id, equals('first-box'));
       expect(newChild.text, equals('first box'));
       expect(newChild.root.attributes[idAttribute], isNotNull);
 
-      var secondChild = container[1] as TextBox;
+      var secondChild = container[1] as Text;
       expect(secondChild.root.id, equals('bye'));
 
       container.removeAt(0);
@@ -111,7 +111,7 @@ main() async {
       expect(document.getElementById(newChild.id), isNull);
       expect(document.getElementById(container.id), isNotNull);
 
-      secondChild = container[0] as TextBox;
+      secondChild = container[0] as Text;
       expect(secondChild.root.id, equals('bye'));
 
       container.removeFromDom();
@@ -125,7 +125,7 @@ main() async {
         'hello world',
         10,
         null,
-        TextBox()..root.id = 'text-box-0',
+        Text()..root.id = 'text-box-0',
         DivElement()..id = 'div-0'
       ]);
 
@@ -136,15 +136,15 @@ main() async {
       expect(contEl.children.map((c) => c.id).toList(),
           equals(['hello', 'bye', '', '', '', 'text-box-0', 'div-0']));
 
-      expect(container[0], isA<TextBox>());
-      expect(container[1], isA<TextBox>());
+      expect(container[0], isA<Text>());
+      expect(container[1], isA<Text>());
       expect(container[2], equals('hello world'));
       expect(container[3], equals(10));
       expect(container[4], isNull);
-      expect(container[5], isA<TextBox>());
+      expect(container[5], isA<Text>());
       expect(container[6], isA<DivElement>());
 
-      final box4 = TextBox()..root.id = 'text-box-4';
+      final box4 = Text()..root.id = 'text-box-4';
       container[4] = box4;
 
       expect(
@@ -152,12 +152,12 @@ main() async {
           equals(
               ['hello', 'bye', '', '', 'text-box-4', 'text-box-0', 'div-0']));
 
-      expect(container[0], isA<TextBox>());
-      expect(container[1], isA<TextBox>());
+      expect(container[0], isA<Text>());
+      expect(container[1], isA<Text>());
       expect(container[2], equals('hello world'));
       expect(container[3], equals(10));
-      expect(container[4], isA<TextBox>());
-      expect(container[5], isA<TextBox>());
+      expect(container[4], isA<Text>());
+      expect(container[5], isA<Text>());
       expect(container[6], isA<DivElement>());
 
       container.removeRange(1, 4);
@@ -165,9 +165,9 @@ main() async {
       expect(contEl.children.map((c) => c.id).toList(),
           equals(['hello', 'text-box-4', 'text-box-0', 'div-0']));
 
-      expect(container[0], isA<TextBox>());
-      expect(container[1], isA<TextBox>());
-      expect(container[2], isA<TextBox>());
+      expect(container[0], isA<Text>());
+      expect(container[1], isA<Text>());
+      expect(container[2], isA<Text>());
       expect(container[3], isA<DivElement>());
 
       box4.removeFromDom();
@@ -175,7 +175,7 @@ main() async {
       expect(contEl.children.map((c) => c.id).toList(),
           equals(['hello', 'text-box-0', 'div-0']));
 
-      final box0 = container[1] as TextBox;
+      final box0 = container[1] as Text;
 
       container.remove(box0);
 
