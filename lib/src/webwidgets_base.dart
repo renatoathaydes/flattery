@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'package:webwidgets/src/util/util.dart';
 
+/// Wrap a simple [Element] into a [Widget].
 Widget widget(Element element) => _BasicWidget(element);
 
 /// A Widget is a simple abstraction around a HTML [Element].
