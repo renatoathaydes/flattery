@@ -81,21 +81,9 @@ pub run test -p chrome
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: http://example.com/issues/replaceme
+[tracker]: https://github.com/renatoathaydes/webwidgets/issues
 
 ## Links
-
-Download the Chrome Driver for running integration tests:
-
-https://sites.google.com/a/chromium.org/chromedriver/downloads
-
-The webdriver package used for driving the browser in integration tests:
-
-https://pub.dartlang.org/packages/webdriver
-
-Useful package for browser testing:
-
-https://github.com/google/pageloader
 
 Dart Test Documentation:
 
