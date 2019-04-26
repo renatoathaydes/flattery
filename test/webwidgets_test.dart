@@ -186,5 +186,35 @@ main() async {
 
       expect(document.getElementById(container.id), isNull);
     });
+
+    test('can be used as a List, sorted, with results reflected in the DOM',
+        () {
+      final names = const [
+        'Walhberct',
+        'Alcmene',
+        'Maximinus',
+        'Ferdinand',
+        'Fridwald',
+      ];
+      final sortedNames = const [
+        'Alcmene',
+        'Ferdinand',
+        'Fridwald',
+        'Maximinus',
+        'Walhberct',
+      ];
+
+      container.clear();
+      container.addAll(names);
+
+      var contEl = document.getElementById(container.id);
+      expect(contEl, isA<DivElement>());
+      expect(contEl.children, hasLength(5));
+      expect(contEl.children.map((e) => e.text), equals(names));
+
+      container.sort();
+
+      expect(contEl.children.map((e) => e.text), equals(sortedNames));
+    });
   });
 }

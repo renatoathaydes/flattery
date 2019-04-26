@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:webwidgets/basic_widgets.dart';
 import 'package:webwidgets/webwidgets.dart';
 
-/// An example model class for which we'll create views
+/// An example model class for which we'll create views.
 class TextCount {
   String text;
   int count;
