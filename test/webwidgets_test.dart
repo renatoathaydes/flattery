@@ -26,10 +26,10 @@ main() async {
     });
   });
 
-  group('ContainerWidget', () {
-    ContainerWidget container;
+  group('Container', () {
+    Container container;
     setUp(() {
-      container = ContainerWidget(children: [
+      container = Container(children: [
         TextBox()
           ..root.id = 'hello'
           ..text = 'First child',

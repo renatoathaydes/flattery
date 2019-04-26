@@ -20,7 +20,7 @@ class TextCount {
 /// by the surrounding DOM, as it is isolated under a shadow DOM.
 class TextCountForm extends TextCount with Widget, ShadowWidget {
   final _errorBox = TextBox()..root.classes.add('error');
-  final _boxes = ContainerWidget<SpanElement>(rootFactory: flexBox);
+  final _boxes = Container<SpanElement>(rootFactory: flexBox);
   final _timeBox = TextBox();
   final _textInput = InputElement(type: 'text')..name = 'text';
   final _countInput = InputElement(type: 'number')..name = 'count';
@@ -34,7 +34,7 @@ class TextCountForm extends TextCount with Widget, ShadowWidget {
   }
 
   @override
-  Element build() => ContainerWidget(
+  Element build() => Container(
         children: [
           inputWidget(_textInput, 'Text:'),
           inputWidget(_countInput, 'Number of Widgets to display:'),
@@ -119,7 +119,7 @@ main() {
     ..count = 5;
 
   // create the UI
-  querySelector('#output').append(ContainerWidget(children: [
+  querySelector('#output').append(Container(children: [
     largeTextBox('Webwidgets Demo (this is a TextBox)'),
     htmlText('<p>This is a little performance test for Webwidgets...</p>'
         '<p>You can insert a lot of widgets to this page and check how '
@@ -142,7 +142,7 @@ Widget htmlText(String text) => widget(Element.span()
   ..innerHtml = text);
 
 Widget inputWidget(InputElement input, String label) =>
-    ContainerWidget(children: [
+    Container(children: [
       widget(LabelElement()
         ..htmlFor = input.name
         ..text = label),

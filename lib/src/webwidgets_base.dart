@@ -55,12 +55,25 @@ Element _defaultRoot() => DivElement()..classes.add('container-widget');
 
 const String idAttribute = 'webwidgets-id';
 
-/// A ContainerWidget is a [Widget] that contains a List of items.
-class ContainerWidget<W> extends ListMixin<W> with Widget {
+/// A Container is a [Widget] that contains a List of items.
+///
+/// It can be treated as a simple [List<W>], but changes to its items are
+/// reflected in the DOM.
+///
+/// TODO: remove items that get removed from the DOM indirectly.
+///
+/// Items may be converted to DOM Elements in the following manner, depending
+/// on their types:
+///
+/// * Widget - its `root` element is added.
+/// * Element - added as is.
+/// * null    - added as an empty span Element.
+/// * others  - added as a span Elemnt whose text is the Object.toString() value
+class Container<W> extends ListMixin<W> with Widget {
   final Element _root;
   final Map<String, W> _itemById = {};
 
-  ContainerWidget(
+  Container(
       {List<W> children = const [],
       Element Function() rootFactory = _defaultRoot})
       : _root = rootFactory() {
@@ -111,7 +124,7 @@ class ContainerWidget<W> extends ListMixin<W> with Widget {
     }
     throw StateError("Element at index $index does not have expected "
         "attribute: $idAttribute. This is caused by modifying the "
-        "ContainerWidget's children indirectly - if index access is required, "
+        "Container's children indirectly - if index access is required, "
         "do not modify this Container's children indirectly, use the "
         "Container's methods only.");
   }
@@ -122,7 +135,7 @@ class ContainerWidget<W> extends ListMixin<W> with Widget {
   @override
   set length(int newLength) {
     if (newLength > length) {
-      throw Exception("Cannot increase length of ContainerWidget without "
+      throw Exception("Cannot increase length of Container without "
           "adding new items to it.");
     }
     if (newLength < 0) {
