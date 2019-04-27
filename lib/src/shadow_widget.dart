@@ -16,6 +16,9 @@ mixin ShadowWidget on Widget {
   String stylesheet;
   bool _isInitialized = false;
 
+  /// Create the host element for the shadow DOM.
+  ///
+  /// By default, a div element is created.
   Element createHostElement() => DivElement()..classes.add('shadow-widget');
 
   @override
