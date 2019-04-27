@@ -1,2 +1,2 @@
-export 'src/base.dart';
+export 'flattery.dart';
 export 'src/widgets/text.dart';

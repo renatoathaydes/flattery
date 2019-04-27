@@ -8,7 +8,7 @@ const List<int> _characters = [
 final _rand = Random();
 
 /// Generate a random String with a certain length.
-/// 
+///
 /// The String will only contain characters 'a' to 'z'.
 String randomString({int length = 12}) {
   assert(length > 0);
