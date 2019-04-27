@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:webwidgets/webwidgets.dart';
+import 'package:flattery/flattery.dart';
 
 /// Simple Counter Model.
 class Counter {

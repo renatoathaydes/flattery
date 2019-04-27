@@ -1,6 +1,6 @@
-# Webwidgets
+# Flattery
 
-Webwidgets is a library for building HTML elements using reactive Widgets.
+Flattery is a library for building HTML elements using Widgets.
 
 Widgets are just Dart objects whose purpose is to represent some user interface element.
 They are implemented using the awesome `dart:html` package, and do not try to hide it - so you can
@@ -81,7 +81,7 @@ pub run test -p chrome
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
-[tracker]: https://github.com/renatoathaydes/webwidgets/issues
+[tracker]: https://github.com/renatoathaydes/flattery/issues
 
 ## Links
 

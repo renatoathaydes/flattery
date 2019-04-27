@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:webwidgets/src/util/util.dart';
+import 'package:flattery/src/util/util.dart';
 
 main() async {
   group('Random Strings', () {

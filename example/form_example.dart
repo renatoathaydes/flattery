@@ -1,7 +1,7 @@
 import 'dart:html';
 
-import 'package:webwidgets/basic_widgets.dart';
-import 'package:webwidgets/webwidgets.dart';
+import 'package:flattery/flattery_widgets.dart';
+import 'package:flattery/flattery.dart';
 
 /// An example model class for which we'll create views.
 class TextCount {
@@ -88,7 +88,7 @@ class TextCountForm extends TextCount with Widget, ShadowWidget {
 
   void _onReset(e) {
     count = 5;
-    text = 'WebWidgets!';
+    text = 'Flattery!';
   }
 
   void _updateCount(int newCount) {
@@ -115,13 +115,13 @@ main() {
   // here, we can use the form as a simple TextCount instance!
   // All updates will be immediately visible in the view.
   form
-    ..text = 'WebWidgets!'
+    ..text = 'Flattery!'
     ..count = 5;
 
   // create the UI
   querySelector('#output').append(Container(children: [
-    largeTextBox('Webwidgets Demo (this is a TextBox)'),
-    htmlText('<p>This is a little performance test for Webwidgets...</p>'
+    largeTextBox('Flattery Demo (this is a TextBox)'),
+    htmlText('<p>This is a little performance test for Flattery...</p>'
         '<p>You can insert a lot of widgets to this page and check how '
         'long it takes!</p><p>The widgets will all mirror the text you enter</p>'),
     form,

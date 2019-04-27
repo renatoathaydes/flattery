@@ -2,7 +2,7 @@
 import 'dart:html';
 
 import 'package:test/test.dart';
-import 'package:webwidgets/basic_widgets.dart';
+import 'package:flattery/flattery_widgets.dart';
 
 main() async {
   group('Simple Widget', () {

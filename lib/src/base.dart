@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:html';
 
-import 'package:webwidgets/src/util/util.dart';
+import 'package:flattery/src/util/util.dart';
 
 /// Wrap a simple [Element] into a [Widget].
 Widget widget(Element element) => _BasicWidget(element);
@@ -56,7 +56,7 @@ class _BasicWidget with Widget {
 
 Element _defaultRoot() => DivElement()..classes.add('container-widget');
 
-const String idAttribute = 'webwidgets-id';
+const String idAttribute = 'flattery-id';
 
 /// A Container is a [Widget] that contains a List of items.
 ///
