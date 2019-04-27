@@ -1,9 +1,9 @@
 name: flattery
 description: Flattery is a library for building HTML elements using Widgets.
 version: 0.1.0
-homepage: https://github.com/renatoathaydes/webwidgets
-repository: https://github.com/renatoathaydes/webwidgets
-issue_tracker: https://github.com/renatoathaydes/webwidgets/issues
+homepage: https://github.com/renatoathaydes/flattery
+repository: https://github.com/renatoathaydes/flattery
+issue_tracker: https://github.com/renatoathaydes/flattery/issues
 author: Renato Athaydes <renato@athaydes.com>
 
 environment:
