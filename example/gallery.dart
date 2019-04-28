@@ -1,4 +1,4 @@
-import 'dart:html' show Element, document;
+import 'dart:html' show Element, DivElement, document;
 
 import 'package:flattery/flattery_widgets.dart';
 
@@ -27,8 +27,9 @@ class Gallery with Widget, ShadowWidget {
             onChange: highlightWidgets,
           ),
           Container(children: [
-            Text(text: 'Text Widget'),
-            Checkbox(id: 'checkbox-example', label: 'CheckBox Widget'),
+            div(Text(text: 'Text Widget')),
+            div(Checkbox(id: 'checkbox-example', label: 'CheckBox Widget')),
+            div(Button(text: 'Button Widget')),
           ])
             ..style.border = 'solid black 1px'
             ..style.marginTop = '1em'
@@ -36,5 +37,7 @@ class Gallery with Widget, ShadowWidget {
         ],
       ).root;
 }
+
+Element div(Widget w) => DivElement()..append(w.root);
 
 main() => document.getElementById('output').append(Gallery().root);

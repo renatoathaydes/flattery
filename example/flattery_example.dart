@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:flattery/flattery.dart';
+import 'package:flattery/flattery_widgets.dart';
 
 /// Simple Counter Model.
 class Counter {
@@ -19,12 +19,8 @@ class CounterView extends Counter with Widget {
   Element build() => Container(
         children: [
           text,
-          ButtonElement()
-            ..text = 'Increment'
-            ..onClick.listen((e) => value++),
-          ButtonElement()
-            ..text = 'Decrement'
-            ..onClick.listen((e) => value--),
+          Button(text: 'Increment', onClick: (e) => value++),
+          Button(text: 'Decrement', onClick: (e) => value--),
         ],
       ).root;
 
