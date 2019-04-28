@@ -202,3 +202,17 @@ class Container<W> extends ListMixin<W> with Widget {
     _itemById[id] = item;
   }
 }
+
+/// Query all [Element]s within the root (or the [document] if not given),
+/// recursing into [ShadowWidget]'s shadow DOM as needed.
+List<Element> querySelectorAllWithShadow(String selectors,
+    [List<Element> accumulator, root]) {
+  if (root == null) root = document;
+  if (accumulator == null) accumulator = [];
+  accumulator.addAll(root.querySelectorAll(selectors));
+  root
+      .querySelectorAll('.shadow-widget')
+      .map((e) => e.shadowRoot)
+      .forEach((e) => querySelectorAllWithShadow(selectors, accumulator, e));
+  return accumulator;
+}
