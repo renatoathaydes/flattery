@@ -39,6 +39,7 @@ mixin Widget {
   Element get root {
     if (_rootRef == null) {
       _rootRef = build();
+      _rootRef.classes.add('flattery-widget');
       assert(_rootRef != null, "build() cannot return null");
     }
     return _rootRef;

@@ -10,7 +10,7 @@ class Gallery with Widget, ShadowWidget {
   }
 
   void highlightWidgets(bool enable) {
-    querySelectorAllWithShadow('[$idAttribute]').forEach((element) {
+    querySelectorAllWithShadow('.flattery-widget').forEach((element) {
       if (enable)
         element.classes.add('highlight-flattery-widget');
       else
