@@ -10,12 +10,15 @@ class Text with Widget {
   DivElement _root;
 
   /// Create a [Text].
-  factory Text() {
+  factory Text({String id, String text = ''}) {
     final root = DivElement()
       ..style.textAlign = 'center'
       ..style.overflow = 'hidden'
       ..style.padding = '10px';
-    return Text._create(root);
+    if (id != null) {
+      root.id = id;
+    }
+    return Text._create(root)..text = text;
   }
 
   Text._create(this._root);
