@@ -1,8 +1,8 @@
 @TestOn('browser')
 import 'dart:html';
 
-import 'package:test/test.dart';
 import 'package:flattery/flattery_widgets.dart';
+import 'package:test/test.dart';
 
 main() async {
   group('Simple Widget', () {
@@ -38,7 +38,29 @@ main() async {
           ..text = 'Second child'
       ])
         ..root.id = 'container-element';
-      querySelector('#output').append(container.root);
+      querySelector('#output').children = [container.root];
+    });
+
+    test('can see when an element is removed from the DOM directly', () async {
+      var contEl = document.getElementById(container.id);
+      expect(contEl.children, hasLength(2));
+
+      final child = container[0] as Text;
+      child.removeFromDom();
+
+      expect(contEl.children, hasLength(1));
+      expect(container, hasLength(1));
+      expect(document.getElementById(child.id), isNull);
+
+      final firstChild = container[0] as Text;
+
+      expect(firstChild.id, equals('bye'));
+
+      // the flatterIds are updated asynchronously, so we schedule the check
+      // in the event loop via a Future().
+      final flatteryIds = await Future(() => container.flatteryIds);
+
+      expect(flatteryIds, equals([firstChild.root.getAttribute(idAttribute)]));
     });
 
     test('can be added to a HTML document, then removed', () {

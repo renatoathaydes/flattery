@@ -60,13 +60,12 @@ const String idAttribute = 'flattery-id';
 
 /// A Container is a [Widget] that contains a List of items.
 ///
-/// It can be treated as a simple [List<W>], but changes to its items are
-/// reflected in the DOM.
+/// It can be treated as a simple [List<W>], with changes to its items
+/// reflected in the DOM. To keep track of its items, an attribute called
+/// 'flattery-id' is added to each element added to it. A random value is used.
 ///
-/// TODO: remove items that get removed from the DOM indirectly.
-///
-/// Items may be converted to DOM Elements in the following manner, depending
-/// on their types:
+/// Items added to a [Container] may be converted to DOM Elements in the
+/// following manner, depending on their types:
 ///
 /// * Widget - its `root` element is added.
 /// * Element - added as is.
@@ -80,11 +79,30 @@ class Container<W> extends ListMixin<W> with Widget {
       {List<W> children = const [],
       Element Function() rootFactory = _defaultRoot})
       : _root = rootFactory() {
+    final observer = MutationObserver((changes, obs) {
+      for (MutationRecord change in changes) {
+        for (final removedNode in change.removedNodes) {
+          final id = (removedNode as Element).getAttribute(idAttribute);
+          _itemById.remove(id);
+        }
+        for (final addedNode in change.addedNodes) {
+          final id = (addedNode as Element).getAttribute(idAttribute);
+          if (id == null) {
+            // element added by external means, store it with the null item
+            _store(addedNode, null);
+          }
+        }
+      }
+    });
+    observer.observe(_root, childList: true);
     addAll(children);
   }
 
   @override
   Element build() => _root;
+
+  /// The flattery-id of all items of this [Container].
+  Iterable<String> get flatteryIds => _itemById.keys;
 
   @override
   void add(W item) {
