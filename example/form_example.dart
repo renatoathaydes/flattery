@@ -1,7 +1,6 @@
 import 'dart:html';
 
 import 'package:flattery/flattery_widgets.dart';
-import 'package:flattery/flattery.dart';
 
 /// An example model class for which we'll create views.
 class TextCount {

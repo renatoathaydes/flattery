@@ -1,7 +1,6 @@
 import 'dart:html' show Element, document;
 
 import 'package:flattery/flattery_widgets.dart';
-import 'package:flattery/src/widgets/checkbox.dart';
 
 class Gallery with Widget, ShadowWidget {
   Gallery() {
