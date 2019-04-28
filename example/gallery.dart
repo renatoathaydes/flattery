@@ -30,6 +30,12 @@ class Gallery with Widget, ShadowWidget {
             div(Text(text: 'Text Widget')),
             div(Checkbox(id: 'checkbox-example', label: 'CheckBox Widget')),
             div(Button(text: 'Button Widget')),
+            div(Row(justify: JustifyContent.spaceEvenly, children: [
+              Text(text: 'This is'),
+              Text(text: 'a Row Widget'),
+              Text(text: 'with 4 Text items'),
+              Text(text: 'spaced evenly'),
+            ]))
           ])
             ..style.border = 'solid black 1px'
             ..style.marginTop = '1em'
