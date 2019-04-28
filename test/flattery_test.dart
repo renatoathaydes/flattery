@@ -41,28 +41,6 @@ main() async {
       querySelector('#output').children = [container.root];
     });
 
-    test('can see when an element is removed from the DOM directly', () async {
-      var contEl = document.getElementById(container.id);
-      expect(contEl.children, hasLength(2));
-
-      final child = container[0] as Text;
-      child.removeFromDom();
-
-      expect(contEl.children, hasLength(1));
-      expect(container, hasLength(1));
-      expect(document.getElementById(child.id), isNull);
-
-      final firstChild = container[0] as Text;
-
-      expect(firstChild.id, equals('bye'));
-
-      // the flatterIds are updated asynchronously, so we schedule the check
-      // in the event loop via a Future().
-      final flatteryIds = await Future(() => container.flatteryIds);
-
-      expect(flatteryIds, equals([firstChild.root.getAttribute(idAttribute)]));
-    });
-
     test('can be added to a HTML document, then removed', () {
       var contEl = document.getElementById(container.id);
       expect(contEl, isA<DivElement>());
@@ -237,6 +215,51 @@ main() async {
       container.sort();
 
       expect(contEl.children.map((e) => e.text), equals(sortedNames));
+    });
+
+    test('can see when an element is removed from the DOM directly', () async {
+      var contEl = document.getElementById(container.id);
+      expect(contEl.children, hasLength(2));
+
+      final child = container[0] as Text;
+      child.removeFromDom();
+
+      expect(contEl.children, hasLength(1));
+      expect(container, hasLength(1));
+      expect(document.getElementById(child.id), isNull);
+
+      final firstChild = container[0] as Text;
+
+      expect(firstChild.id, equals('bye'));
+
+      // the flatterIds are updated asynchronously, so we schedule the check
+      // in the event loop via a Future().
+      final flatteryIds = await Future(() => container.flatteryIds);
+
+      expect(flatteryIds, equals([firstChild.root.getAttribute(idAttribute)]));
+    });
+
+    test('can see when an element is added indirectly', () async {
+      var contEl = document.getElementById(container.id);
+      expect(contEl.children, hasLength(2));
+
+      final div = DivElement()..id = 'new-child';
+      contEl.append(div);
+
+      // the flatterIds are updated asynchronously, so we schedule the check
+      // in the event loop via a Future().
+      final flatteryIds = await Future(() => container.flatteryIds);
+
+      expect(contEl.children, hasLength(3));
+      expect(container, hasLength(3));
+      expect(flatteryIds, hasLength(3));
+      expect(container[0], isA<Text>());
+      expect(container[1], isA<Text>());
+      expect(div.getAttribute(idAttribute), isNotNull);
+      expect(flatteryIds, contains(div.getAttribute(idAttribute)));
+
+      // the new Element was added via the DOM, so its item must be null
+      expect(container[2], isNull);
     });
   });
 }
