@@ -16,3 +16,15 @@ String randomString({int length = 12}) {
       length, (_) => _characters[_rand.nextInt(_characters.length)]);
   return String.fromCharCodes(codeUnits);
 }
+
+/// Return the value at the given index in the given list if it is within
+/// bounds and not null, otherwise return the provided defaultValue.
+T valueAt<T>(List<T> list, int index, T defaultValue) {
+  if (index < list.length) {
+    final value = list[index];
+    if (value != null) {
+      return value;
+    }
+  }
+  return defaultValue;
+}
