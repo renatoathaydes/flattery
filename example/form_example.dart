@@ -18,9 +18,9 @@ class TextCount {
 /// By using ShadowWidget, we ensure that our Widget's styles cannot be broken
 /// by the surrounding DOM, as it is isolated under a shadow DOM.
 class TextCountForm extends TextCount with Widget, ShadowWidget {
-  final _errorBox = Text()..root.classes.add('error');
+  final _errorBox = Text('')..root.classes.add('error');
   final _boxes = Container<SpanElement>(rootFactory: flexBox);
-  final _timeBox = Text();
+  final _timeBox = Text('');
   final _textInput = InputElement(type: 'text')..name = 'text';
   final _countInput = InputElement(type: 'number')..name = 'count';
 
@@ -131,7 +131,7 @@ main() {
 
 Element lineBreak() => DivElement()..style.width = '100%';
 
-Widget largeTextBox(String text) => Text()
+Widget largeTextBox(String text) => Text('')
   ..style.border = 'solid gray 2px'
   ..style.fontSize = '4em'
   ..text = text;

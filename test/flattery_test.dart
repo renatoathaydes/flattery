@@ -8,7 +8,7 @@ main() async {
   group('Simple Widget', () {
     Text textBox;
     setUp(() {
-      textBox = Text()
+      textBox = Text('')
         ..root.id = 'hello'
         ..text = 'Hey there';
       querySelector('#output').append(textBox.root);
@@ -30,10 +30,10 @@ main() async {
     Container container;
     setUp(() {
       container = Container(children: [
-        Text()
+        Text('')
           ..root.id = 'hello'
           ..text = 'First child',
-        Text()
+        Text('')
           ..root.id = 'bye'
           ..text = 'Second child'
       ])
@@ -63,7 +63,7 @@ main() async {
     });
 
     test('allows widgets to be added and removed', () {
-      container.add(Text()
+      container.add(Text('')
         ..root.id = 'new-box'
         ..text = 'new box');
 
@@ -89,7 +89,7 @@ main() async {
     });
 
     test('allows widgets to be inserted at first index and removed', () {
-      container[0] = Text()
+      container[0] = Text('')
         ..root.id = 'first-box'
         ..text = 'first box';
 
@@ -125,7 +125,7 @@ main() async {
         'hello world',
         10,
         null,
-        Text()..root.id = 'text-box-0',
+        Text('')..root.id = 'text-box-0',
         DivElement()..id = 'div-0'
       ]);
 
@@ -144,7 +144,7 @@ main() async {
       expect(container[5], isA<Text>());
       expect(container[6], isA<DivElement>());
 
-      final box4 = Text()..root.id = 'text-box-4';
+      final box4 = Text('')..root.id = 'text-box-4';
       container[4] = box4;
 
       expect(

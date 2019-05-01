@@ -10,7 +10,7 @@ class Text with Widget {
   DivElement _root;
 
   /// Create a [Text].
-  factory Text({String id, String text = ''}) {
+  factory Text(String text, {String id}) {
     final root = DivElement()
       ..style.textAlign = 'center'
       ..style.overflow = 'hidden'
