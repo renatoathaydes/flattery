@@ -3,6 +3,9 @@ import 'dart:html';
 
 import 'package:flattery/src/util/util.dart';
 
+/// Attribute added to items of a [Container] in order to keep track of them.
+const String idAttribute = 'fty-id';
+
 /// Wrap a simple [Element] into a [Widget].
 Widget widget(Element element) => _BasicWidget(element);
 
@@ -10,7 +13,6 @@ Widget widget(Element element) => _BasicWidget(element);
 ///
 /// It makes it possible to create user interfaces declaratively, using Dart.
 mixin Widget {
-
   CssStyleDeclaration get style => root.style;
 
   /// Remove this [Widget] from the DOM.
@@ -23,15 +25,7 @@ mixin Widget {
   /// The ID of this [Widget].
   String get id => root?.id ?? "";
 
-  /// The root of this element.
-  ///
-  /// Accessing the root may cause the [build] method to be invoked if it
-  /// had not been invoked yet.
-  ///
-  /// The [Element] returned by this getter is not necessarily the same as the
-  /// one created by the [build] method - subtypes are free to override it,
-  /// but when this [Widget] is attached to the DOM, this is the [Element] that
-  /// should be used.
+  /// The root [Element] of this [Widget].
   Element get root;
 }
 
@@ -45,8 +39,6 @@ class _BasicWidget with Widget {
 }
 
 Element _defaultRoot() => DivElement()..classes.add('container-widget');
-
-const String idAttribute = 'flattery-id';
 
 /// A Container is a [Widget] that contains a List of items.
 ///
