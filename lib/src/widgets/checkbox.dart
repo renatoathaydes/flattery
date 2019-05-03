@@ -9,6 +9,7 @@ import '../base.dart';
 class Checkbox with Widget {
   final _input = CheckboxInputElement();
   final _label = LabelElement();
+  final Element root = SpanElement();
 
   Checkbox(
       {String id = '',
@@ -25,8 +26,7 @@ class Checkbox with Widget {
       _input.onChange.listen((e) => onChange(_input.checked));
     }
     _label.text = label;
-  }
 
-  @override
-  Element build() => SpanElement()..append(_input)..append(_label);
+    root..append(_input)..append(_label);
+  }
 }

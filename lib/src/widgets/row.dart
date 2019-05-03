@@ -51,20 +51,17 @@ String _alignValue(AlignItems align) {
 
 /// A layout [Widget] which attempts to lay its children all on the same row.
 class Row with Widget {
-  final _root = DivElement();
+  final root = DivElement();
 
   Row(
       {List<Widget> children,
       JustifyContent justify = JustifyContent.start,
       AlignItems align = AlignItems.start}) {
-    _root.style
+    root.style
       ..display = 'flex'
       ..justifyContent = _justifyValue(justify)
       ..alignItems = _alignValue(align);
 
-    children.forEach((c) => _root.append(SpanElement()..append(c.root)));
+    children.forEach((c) => root.append(SpanElement()..append(c.root)));
   }
-
-  @override
-  Element build() => _root;
 }

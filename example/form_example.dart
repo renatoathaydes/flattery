@@ -28,25 +28,25 @@ class TextCountForm extends TextCount with Widget, ShadowWidget {
     _countInput.onKeyUp.listen(_onCountChange);
     _textInput.onKeyUp.listen(_onTextChange);
     stylesheet = //
-    '.error { color: red; } '
+        '.error { color: red; } '
         '.box { padding: 0.2em; border: solid 1px gray; margin: 0.1em; }';
   }
 
   @override
   Element build() => Container(
-    children: [
-      inputWidget(_textInput, 'Text:'),
-      inputWidget(_countInput, 'Number of Widgets to display:'),
-      _errorBox,
-      button('Reset', _onReset),
-      lineBreak(),
-      _timeBox,
-      lineBreak()..style.minHeight = '20px',
-      _boxes
-    ],
-    rootFactory: flexBox,
-  ).root
-    ..classes.add('text-box-form');
+        children: [
+          inputWidget(_textInput, 'Text:'),
+          inputWidget(_countInput, 'Number of Widgets to display:'),
+          _errorBox,
+          button('Reset', _onReset),
+          lineBreak(),
+          _timeBox,
+          lineBreak()..style.minHeight = '20px',
+          _boxes
+        ],
+        rootFactory: flexBox,
+      ).root
+        ..classes.add('text-box-form');
 
   set text(String text) {
     super.text = text;
@@ -140,8 +140,7 @@ Widget htmlText(String text) => widget(Element.span()
   ..style.fontSize = '1.5em'
   ..innerHtml = text);
 
-Widget inputWidget(InputElement input, String label) =>
-    Container(children: [
+Widget inputWidget(InputElement input, String label) => Container(children: [
       widget(LabelElement()
         ..htmlFor = input.name
         ..text = label),

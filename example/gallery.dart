@@ -1,4 +1,4 @@
-import 'dart:html' show Element, DivElement, document;
+import 'dart:html';
 
 import 'package:flattery/flattery_widgets.dart';
 

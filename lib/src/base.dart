@@ -10,22 +10,18 @@ Widget widget(Element element) => _BasicWidget(element);
 ///
 /// It makes it possible to create user interfaces declaratively, using Dart.
 mixin Widget {
-  Element _rootRef;
 
   CssStyleDeclaration get style => root.style;
-
-  /// Build the root [Element] of this [Widget].
-  Element build();
 
   /// Remove this [Widget] from the DOM.
   ///
   /// This call is ignored if the [Widget] is not attached to the DOM.
   void removeFromDom() {
-    _rootRef?.remove();
+    root?.remove();
   }
 
   /// The ID of this [Widget].
-  String get id => _rootRef?.id ?? "";
+  String get id => root?.id ?? "";
 
   /// The root of this element.
   ///
@@ -36,14 +32,7 @@ mixin Widget {
   /// one created by the [build] method - subtypes are free to override it,
   /// but when this [Widget] is attached to the DOM, this is the [Element] that
   /// should be used.
-  Element get root {
-    if (_rootRef == null) {
-      _rootRef = build();
-      _rootRef.classes.add('flattery-widget');
-      assert(_rootRef != null, "build() cannot return null");
-    }
-    return _rootRef;
-  }
+  Element get root;
 }
 
 class _BasicWidget with Widget {
@@ -52,7 +41,7 @@ class _BasicWidget with Widget {
   _BasicWidget(this._element);
 
   @override
-  Element build() => _element;
+  Element get root => _element;
 }
 
 Element _defaultRoot() => DivElement()..classes.add('container-widget');
@@ -100,7 +89,7 @@ class Container<W> extends ListMixin<W> with Widget {
   }
 
   @override
-  Element build() => _root;
+  Element get root => _root;
 
   /// The flattery-id of all items of this [Container].
   Iterable<String> get flatteryIds => _itemById.keys;

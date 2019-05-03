@@ -14,27 +14,37 @@ mixin ShadowWidget on Widget {
   /// Notice that styles declared in this stylesheet apply only to this Widget,
   /// not globally.
   String stylesheet;
-  bool _isInitialized = false;
+
+  Element _host;
 
   /// Create the host element for the shadow DOM.
   ///
   /// By default, a div element is created.
   Element createHostElement() => DivElement()..classes.add('shadow-widget');
 
+  /// Build the element for this [Widget].
+  ///
+  /// The returned [Element] will be appended to the shadow DOM of the host
+  /// element created by calling [createHostElement].
+  Element build();
+
+  /// The root [Element] of this [Widget].
+  ///
+  /// Sub-classes are not supposed to override this getter, but if they do,
+  /// they must invoke super.
   @override
   Element get root {
-    final r = super.root;
-    if (_isInitialized) {
-      return r;
+    if (_host != null) {
+      return _host;
     } else {
-      _isInitialized = true;
-      final host = createHostElement();
-      final shadow = host.attachShadow(shadowAttachOptions);
+      final element = build();
+      _host = createHostElement();
+      final shadow = _host.attachShadow(shadowAttachOptions);
       if (stylesheet != null) {
         shadow.append(StyleElement()..text = stylesheet);
       }
-      shadow.append(r);
-      return host;
+      shadow.append(element);
+      return _host;
     }
   }
 }

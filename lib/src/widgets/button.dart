@@ -4,18 +4,15 @@ import 'package:flattery/flattery.dart';
 
 /// Button Widget.
 class Button with Widget {
-  final _element = ButtonElement();
+  final root = ButtonElement();
 
   Button({String id, String text = '', Function(MouseEvent) onClick}) {
     if (id != null) {
-      _element.id = id;
+      root.id = id;
     }
-    _element.text = text;
+    root.text = text;
     if (onClick != null) {
-      _element.onClick.listen(onClick);
+      root.onClick.listen(onClick);
     }
   }
-
-  @override
-  Element build() => _element;
 }

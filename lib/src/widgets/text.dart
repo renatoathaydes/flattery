@@ -7,27 +7,21 @@ import '../base.dart';
 /// By default, it centers its contents and applies a padding of 10px
 /// on all sides.
 class Text with Widget {
-  DivElement _root;
+  final root = DivElement();
 
   /// Create a [Text].
-  factory Text(String text, {String id}) {
-    final root = DivElement()
+  Text(String text, {String id}) {
+    root
       ..style.textAlign = 'center'
       ..style.overflow = 'hidden'
       ..style.padding = '10px';
     if (id != null) {
       root.id = id;
     }
-    return Text._create(root)..text = text;
   }
 
-  Text._create(this._root);
-
-  @override
-  Element build() => _root;
-
   /// Get the text of this [Text].
-  get text => _root.text;
+  get text => root.text;
 
   /// Set the text of this [Text].
   set text(String text) => root.text = text;

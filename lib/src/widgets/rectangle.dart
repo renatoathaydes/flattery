@@ -4,7 +4,7 @@ import 'package:flattery/flattery.dart';
 
 /// A Rectangle Widget.
 class Rectangle with Widget {
-  final Element _element = DivElement()..style.position = 'relative';
+  final root = DivElement()..style.position = 'relative';
 
   Rectangle(
       {String width = '100px',
@@ -13,7 +13,7 @@ class Rectangle with Widget {
       String left = '0',
       String fill = 'white',
       String border = 'solid black 1px'}) {
-    _element.style
+    root.style
       ..width = width
       ..height = height
       ..backgroundColor = fill
@@ -29,7 +29,7 @@ class Rectangle with Widget {
       String left = '0',
       String fill = 'white',
       String border = 'solid black 1px'}) {
-    _element.style
+    root.style
       ..width = size
       ..height = size
       ..backgroundColor = fill
@@ -37,7 +37,4 @@ class Rectangle with Widget {
       ..top = top
       ..left = left;
   }
-
-  @override
-  Element build() => _element;
 }

@@ -24,7 +24,7 @@ String _alignmentValue(ColumnAlignment alignment) {
 /// This Widget lays its children out on a single column. It allows for controlling the height of each line as well as
 /// the alignment of each child using [ColumnAlignment].
 class Column with Widget {
-  final _root = DivElement();
+  final root = DivElement();
 
   Column({
     List<Widget> children,
@@ -33,12 +33,12 @@ class Column with Widget {
     List<ColumnAlignment> childrenAlignments = const [],
     String width,
   }) {
-    _root.style
+    root.style
       ..display = 'grid'
       ..gridTemplateRows = _templateRows(children.length, lineHeights);
 
     if (width != null) {
-      _root.style.gridTemplateColumns = width;
+      root.style.gridTemplateColumns = width;
     }
 
     for (var i = 0; i < children.length; i++) {
@@ -48,7 +48,7 @@ class Column with Widget {
       } else if (defaultAlignment != null) {
         item.style.justifySelf = _alignmentValue(defaultAlignment);
       }
-      _root.append(item);
+      root.append(item);
     }
   }
 
@@ -64,7 +64,4 @@ class Column with Widget {
     }
     return buffer.toString().trimRight();
   }
-
-  @override
-  Element build() => _root;
 }

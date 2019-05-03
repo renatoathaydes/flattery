@@ -8,21 +8,23 @@ class Counter {
 }
 
 /// A Counter Widget.
-class CounterView extends Counter with Widget {
-  final text = DivElement();
+class CounterView extends Counter with Widget, ShadowWidget {
+  final text = Text('')..style.textAlign = 'left';
+
+  // use a 2x2 grid to place the Widgets
+  Element build() => Grid(columnGap: '10px', columnWidths: [
+        '10em', '10em' //
+      ], children: [
+        [text, text], // row 1 (repeat the element so it takes up both columns)
+        [
+          Button(text: 'Increment', onClick: (e) => value++),
+          Button(text: 'Decrement', onClick: (e) => value--),
+        ] // row 2
+      ]).root;
 
   CounterView() {
     _update();
   }
-
-  @override
-  Element build() => Container(
-        children: [
-          text,
-          Button(text: 'Increment', onClick: (e) => value++),
-          Button(text: 'Decrement', onClick: (e) => value--),
-        ],
-      ).root;
 
   @override
   set value(int value) {
