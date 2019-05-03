@@ -14,7 +14,8 @@ class Text with Widget {
     root
       ..style.textAlign = 'center'
       ..style.overflow = 'hidden'
-      ..style.padding = '10px';
+      ..style.padding = '10px'
+      ..text = text;
     if (id != null) {
       root.id = id;
     }
