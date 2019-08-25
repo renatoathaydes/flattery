@@ -153,20 +153,17 @@ class Container<W> extends ListMixin<W> with Widget {
       itemsToRemove--;
     }
     assert(
-        length == newLength, "New length: $newLength, Current length: $length");
+    length == newLength, "New length: $newLength, Current length: $length");
   }
 
   Element _asElement(item) {
-    switch (item) {
-      case Widget:
-        return item.root;
-    }
     if (item is Widget) {
       return item.root;
     } else if (item is Element) {
       return item;
     } else {
-      return SpanElement()..text = item?.toString() ?? "";
+      return SpanElement()
+        ..text = item?.toString() ?? "";
     }
   }
 
@@ -189,9 +186,9 @@ class Container<W> extends ListMixin<W> with Widget {
 /// recursing into [ShadowWidget]'s shadow DOM as needed.
 List<Element> querySelectorAllWithShadow(String selectors,
     [List<Element> accumulator, root]) {
-  if (root == null) root = document;
-  if (accumulator == null) accumulator = [];
-  accumulator.addAll(root.querySelectorAll(selectors));
+  root ??= document;
+  accumulator ??= [];
+  accumulator.addAll(root.querySelectorAll(selectors) as Iterable<Element>);
   root
       .querySelectorAll('.shadow-widget')
       .map((e) => e.shadowRoot)

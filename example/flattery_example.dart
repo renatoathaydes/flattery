@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'dart:html' hide Text;
 
 import 'package:flattery/flattery_widgets.dart';
 

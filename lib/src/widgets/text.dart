@@ -22,7 +22,7 @@ class Text with Widget {
   }
 
   /// Get the text of this [Text].
-  get text => root.text;
+  String get text => root.text;
 
   /// Set the text of this [Text].
   set text(String text) => root.text = text;
