@@ -176,11 +176,20 @@ main() async {
           equals(['hello', 'text-box-0', 'div-0']));
 
       final box0 = container[1] as Text;
+      final div0 = container[2] as DivElement;
 
       container.remove(box0);
 
       expect(contEl.children.map((c) => c.id).toList(),
           equals(['hello', 'div-0']));
+
+      // delete everything else
+      container.removeWhere((e) => true);
+
+      expect(contEl.children, isEmpty);
+      expect(document.getElementById(box4.id), isNull);
+      expect(document.getElementById(box0.id), isNull);
+      expect(document.getElementById(div0.id), isNull);
 
       container.removeFromDom();
 
@@ -261,5 +270,38 @@ main() async {
       // the new Element was added via the DOM, so its item must be null
       expect(container[2], isNull);
     });
+
+    test('can remove Widget by equality', () {
+      container.add(_ExampleSimpleTypeWidget('hello'));
+
+      expect(container[2], isA<_ExampleSimpleTypeWidget>());
+      final widget = container[2] as Widget;
+
+      container.remove(_ExampleSimpleType('hello'));
+
+      expect(document.getElementById(widget.id), isNull);
+    });
   });
+}
+
+class _ExampleSimpleType {
+  String value;
+
+  _ExampleSimpleType(this.value);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _ExampleSimpleType && value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
+class _ExampleSimpleTypeWidget extends _ExampleSimpleType
+    with Widget, ShadowWidget {
+  _ExampleSimpleTypeWidget(String value) : super(value);
+
+  @override
+  Element build() => Element.div()..text = value;
 }
