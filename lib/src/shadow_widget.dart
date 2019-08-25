@@ -47,4 +47,11 @@ mixin ShadowWidget on Widget {
       return _host;
     }
   }
+
+  /// Rebuild this widget's [Element].
+  void rebuild() {
+    // keep only the stylesheet
+    root.shadowRoot.nodes.removeWhere((node) => !(node is StyleElement));
+    root.shadowRoot.append(build());
+  }
 }
