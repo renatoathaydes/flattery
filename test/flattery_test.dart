@@ -272,14 +272,27 @@ main() async {
     });
 
     test('can remove Widget by equality', () {
+      container.clear();
       container.add(_ExampleSimpleTypeWidget('hello'));
+      container.add(_ExampleSimpleTypeWidget('bye'));
 
-      expect(container[2], isA<_ExampleSimpleTypeWidget>());
-      final widget = container[2] as Widget;
+      expect(container, hasLength(2));
+      expect(container[0], isA<_ExampleSimpleTypeWidget>());
+      final widget = container[0] as Widget;
 
       container.remove(_ExampleSimpleType('hello'));
 
       expect(document.getElementById(widget.id), isNull);
+
+      expect(container, hasLength(1));
+      expect(container, isNot(contains(widget)));
+      expect(container[0], isA<_ExampleSimpleTypeWidget>());
+      final widget2 = container[0] as Widget;
+
+      container.remove(_ExampleSimpleType('bye'));
+
+      expect(document.getElementById(widget2.id), isNull);
+      expect(container, isEmpty);
     });
   });
 }
