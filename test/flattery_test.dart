@@ -271,7 +271,7 @@ main() async {
       expect(container[2], isNull);
     });
 
-    test('can remove Widget by equality', () {
+    test('can remove Widget by equality', () async {
       container.clear();
       container.add(_ExampleSimpleTypeWidget('hello'));
       container.add(_ExampleSimpleTypeWidget('bye'));
@@ -282,6 +282,8 @@ main() async {
 
       container.remove(_ExampleSimpleType('hello'));
 
+      await Future.delayed(Duration(milliseconds: 100));
+
       expect(document.getElementById(widget.id), isNull);
 
       expect(container, hasLength(1));
@@ -290,6 +292,7 @@ main() async {
       final widget2 = container[0] as Widget;
 
       container.remove(_ExampleSimpleType('bye'));
+      await Future.delayed(Duration(milliseconds: 100));
 
       expect(document.getElementById(widget2.id), isNull);
       expect(container, isEmpty);
