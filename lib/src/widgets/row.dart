@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:flattery/flattery.dart';
+import '../widget.dart';
 
 /// Options for justifying the contents of a [Row].
 enum JustifyContent {
@@ -53,18 +53,17 @@ String _alignValue(AlignItems align) {
 class Row with Widget {
   final root = DivElement();
 
-  Row({List<Widget> children,
-    JustifyContent justify = JustifyContent.start,
-    AlignItems align = AlignItems.start,
-    bool allowWrap = false}) {
+  Row(
+      {List<Widget> children,
+      JustifyContent justify = JustifyContent.start,
+      AlignItems align = AlignItems.start,
+      bool allowWrap = false}) {
     root.style
       ..display = 'flex'
       ..flexFlow = 'row${allowWrap ? ' wrap' : ''}'
       ..justifyContent = _justifyValue(justify)
       ..alignItems = _alignValue(align);
 
-    children.forEach((c) =>
-        root.append(SpanElement()
-          ..append(c.root)));
+    children.forEach((c) => root.append(SpanElement()..append(c.root)));
   }
 }

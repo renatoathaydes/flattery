@@ -6,5 +6,7 @@
 /// DOM in the middle.
 library flattery;
 
-export 'src/base.dart';
+export 'src/container.dart';
 export 'src/shadow_widget.dart';
+export 'src/util/util.dart' show querySelectorAllWithShadow;
+export 'src/widget.dart';

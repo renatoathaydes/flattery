@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math' show Random;
 
 const List<int> _characters = [
@@ -27,4 +28,18 @@ T valueAt<T>(List<T> list, int index, T defaultValue) {
     }
   }
   return defaultValue;
+}
+
+/// Query all [Element]s within the root (or the [document] if not given),
+/// recursing into [ShadowWidget]'s shadow DOM as needed.
+List<Element> querySelectorAllWithShadow(String selectors,
+    [List<Element> accumulator, root]) {
+  root ??= document;
+  accumulator ??= [];
+  accumulator.addAll(root.querySelectorAll(selectors) as Iterable<Element>);
+  root
+      .querySelectorAll('.shadow-widget')
+      .map((e) => e.shadowRoot)
+      .forEach((e) => querySelectorAllWithShadow(selectors, accumulator, e));
+  return accumulator;
 }

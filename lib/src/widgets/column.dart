@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:flattery/flattery.dart';
+import '../widget.dart';
 
 /// Possible values for aligning the children of a [Column].
 enum ColumnAlignment { start, end, center, stretch }

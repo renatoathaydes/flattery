@@ -1,8 +1,8 @@
 import 'dart:html';
 import 'dart:math';
 
-import 'package:flattery/flattery.dart';
-import 'package:flattery/src/util/util.dart';
+import '../util/util.dart';
+import '../widget.dart';
 
 String _templateRowsValue(List<String> rowHeights, int rowCount) {
   final buffer = StringBuffer();

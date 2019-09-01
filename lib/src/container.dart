@@ -1,42 +1,8 @@
 import 'dart:collection';
 import 'dart:html';
 
-import 'package:flattery/src/util/util.dart';
-
-/// Attribute added to items of a [Container] in order to keep track of them.
-const String idAttribute = 'fty-id';
-
-/// Wrap a simple [Element] into a [Widget].
-Widget widget(Element element) => _BasicWidget(element);
-
-/// A Widget is a simple abstraction around a HTML [Element].
-///
-/// It makes it possible to create user interfaces declaratively, using Dart.
-mixin Widget {
-  CssStyleDeclaration get style => root.style;
-
-  /// Remove this [Widget] from the DOM.
-  ///
-  /// This call is ignored if the [Widget] is not attached to the DOM.
-  void removeFromDom() {
-    root?.remove();
-  }
-
-  /// The ID of this [Widget].
-  String get id => root?.id ?? "";
-
-  /// The root [Element] of this [Widget].
-  Element get root;
-}
-
-class _BasicWidget with Widget {
-  final Element _element;
-
-  _BasicWidget(this._element);
-
-  @override
-  Element get root => _element;
-}
+import 'util/util.dart';
+import 'widget.dart';
 
 Element _defaultRoot() => DivElement()..classes.add('container-widget');
 
@@ -211,18 +177,4 @@ class Container<W> extends ListMixin<W> with Widget {
     }
     _itemById[id] = item;
   }
-}
-
-/// Query all [Element]s within the root (or the [document] if not given),
-/// recursing into [ShadowWidget]'s shadow DOM as needed.
-List<Element> querySelectorAllWithShadow(String selectors,
-    [List<Element> accumulator, root]) {
-  root ??= document;
-  accumulator ??= [];
-  accumulator.addAll(root.querySelectorAll(selectors) as Iterable<Element>);
-  root
-      .querySelectorAll('.shadow-widget')
-      .map((e) => e.shadowRoot)
-      .forEach((e) => querySelectorAllWithShadow(selectors, accumulator, e));
-  return accumulator;
 }

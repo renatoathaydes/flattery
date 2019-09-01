@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import './base.dart';
+import './widget.dart';
 
 const shadowAttachOptions = {'mode': 'open'};
 

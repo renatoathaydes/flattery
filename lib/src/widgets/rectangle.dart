@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:flattery/flattery.dart';
+import '../widget.dart';
 
 /// A Rectangle Widget.
 class Rectangle with Widget {

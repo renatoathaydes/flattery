@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:flattery/flattery.dart';
+import '../widget.dart';
 
 /// Button Widget.
 class Button with Widget {
