@@ -4,6 +4,8 @@ import 'dart:html';
 import 'package:flattery/flattery_widgets.dart';
 import 'package:test/test.dart';
 
+import 'util/util_test.dart';
+
 main() async {
   group('Simple Widget', () {
     Text textBox;
@@ -229,6 +231,7 @@ main() async {
     test('can see when an element is removed from the DOM directly', () async {
       var contEl = document.getElementById(container.id);
       expect(contEl.children, hasLength(2));
+      await nextEventLoopCycle();
 
       final child = container[0] as Text;
       child.removeFromDom();
@@ -251,6 +254,7 @@ main() async {
     test('can see when an element is added indirectly', () async {
       var contEl = document.getElementById(container.id);
       expect(contEl.children, hasLength(2));
+      await nextEventLoopCycle();
 
       final div = DivElement()..id = 'new-child';
       contEl.append(div);
@@ -271,31 +275,60 @@ main() async {
       expect(container[2], isNull);
     });
 
-    test('can remove Widget by equality', () async {
+    test('can remove Widget by equality (verify observers behaviour)',
+        () async {
       container.clear();
+      await nextEventLoopCycle();
+
+      final addedItems = [];
+      final removedItems = [];
+      container.addObserver((added, removed) {
+        addedItems.addAll(added);
+        removedItems.addAll(removed);
+      });
+
       container.add(_ExampleSimpleTypeWidget('hello'));
       container.add(_ExampleSimpleTypeWidget('bye'));
 
       expect(container, hasLength(2));
       expect(container[0], isA<_ExampleSimpleTypeWidget>());
-      final widget = container[0] as Widget;
+      expect(container[1], isA<_ExampleSimpleTypeWidget>());
+
+      final widget0 = container[0] as Widget;
+      final widget1 = container[1] as Widget;
+
+      await nextEventLoopCycle();
+
+      expect(addedItems, equals([widget0, widget1]));
+      expect(removedItems, isEmpty);
+
+      addedItems.clear();
 
       container.remove(_ExampleSimpleType('hello'));
 
-      await Future.delayed(Duration(milliseconds: 100));
-
-      expect(document.getElementById(widget.id), isNull);
+      expect(document.getElementById(widget0.id), isNull);
 
       expect(container, hasLength(1));
-      expect(container, isNot(contains(widget)));
-      expect(container[0], isA<_ExampleSimpleTypeWidget>());
-      final widget2 = container[0] as Widget;
+      expect(container, isNot(contains(widget0)));
+      expect(container[0], equals(widget1));
+
+      await nextEventLoopCycle();
+
+      expect(addedItems, isEmpty);
+      expect(removedItems, equals([widget0]));
+
+      removedItems.clear();
 
       container.remove(_ExampleSimpleType('bye'));
-      await Future.delayed(Duration(milliseconds: 100));
 
-      expect(document.getElementById(widget2.id), isNull);
+      expect(document.getElementById(widget0.id), isNull);
+      expect(document.getElementById(widget1.id), isNull);
       expect(container, isEmpty);
+
+      await nextEventLoopCycle();
+
+      expect(addedItems, isEmpty);
+      expect(removedItems, equals([widget1]));
     });
   });
 }
@@ -320,4 +353,11 @@ class _ExampleSimpleTypeWidget extends _ExampleSimpleType
 
   @override
   Element build() => Element.div()..text = value;
+
+  @override
+  String toString() {
+    return '_ExampleSimpleTypeWidget{$value}';
+  }
+
+
 }

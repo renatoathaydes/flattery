@@ -40,6 +40,9 @@ class _BasicWidget with Widget {
 
 Element _defaultRoot() => DivElement()..classes.add('container-widget');
 
+/// Function that may run when changes are made to a [Container].
+typedef ContainerObserver<W> = void Function(List<W> added, List<W> removed);
+
 /// A Container is a [Widget] that contains a List of items.
 ///
 /// It can be treated as a simple [List<W>], with changes to its items
@@ -56,28 +59,57 @@ Element _defaultRoot() => DivElement()..classes.add('container-widget');
 class Container<W> extends ListMixin<W> with Widget {
   final Element _root;
   final Map<String, W> _itemById = {};
+  final List<ContainerObserver<W>> _observers = [];
 
   Container(
       {List<W> children = const [],
       Element Function() rootFactory = _defaultRoot})
       : _root = rootFactory() {
-    final observer = MutationObserver((changes, obs) {
-      for (MutationRecord change in changes) {
-        for (final removedNode in change.removedNodes) {
-          final id = (removedNode as Element).getAttribute(idAttribute);
-          _itemById.remove(id);
-        }
-        for (final addedNode in change.addedNodes) {
-          final id = (addedNode as Element).getAttribute(idAttribute);
-          if (id == null) {
-            // element added by external means, store it with the null item
-            _store(addedNode, null);
-          }
-        }
-      }
-    });
+    final observer = MutationObserver(_onMutation);
     observer.observe(_root, childList: true);
     addAll(children);
+  }
+
+  // this method is the only one responsible for removing items from the
+  // _itemById Map because it's the only place we can always know when an item
+  // is removed, even if not via this class.
+  void _onMutation(List changes, MutationObserver obs) {
+    final added = <W>[];
+    final removed = <W>[];
+    final addedNodes =
+        changes.cast<MutationRecord>().expand((c) => c.addedNodes).toList();
+    final removedNodes =
+        changes.cast<MutationRecord>().expand((c) => c.removedNodes).toList();
+
+    // items both add/removed were simply swapped around, so do not report them
+    final inBoth = addedNodes.toSet().intersection(removedNodes.toSet());
+    addedNodes.removeWhere(inBoth.contains);
+    removedNodes.removeWhere(inBoth.contains);
+
+    for (final addedNode in addedNodes) {
+      final id = _idOf(addedNode);
+      if (id == null) {
+        // element added by external means, store it with the null item
+        _store(addedNode as Element, null);
+      } else {
+        final addedItem = _itemById[id];
+        if (addedItem != null) added.add(addedItem);
+      }
+    }
+    for (final removedNode in removedNodes) {
+      final id = _idOf(removedNode);
+      if (id != null) {
+        final removedItem = _itemById.remove(id);
+        if (removedItem != null) removed.add(removedItem);
+      }
+    }
+    _observers.forEach((o) => o(added, removed));
+  }
+
+  static String _idOf(Node node) {
+    return (node is Element)
+        ? node.getAttribute(idAttribute)
+        : throw Exception("Unexpected Node which is not a Element: $node");
   }
 
   @override
@@ -85,6 +117,11 @@ class Container<W> extends ListMixin<W> with Widget {
 
   /// The flattery-id of all items of this [Container].
   Iterable<String> get flatteryIds => _itemById.keys;
+
+  void addObserver(ContainerObserver<W> observer) => _observers.add(observer);
+
+  void removeObserver(ContainerObserver<W> observer) =>
+      _observers.remove(observer);
 
   @override
   void add(W item) {
@@ -100,11 +137,6 @@ class Container<W> extends ListMixin<W> with Widget {
 
   @override
   void operator []=(int index, W item) {
-    // this will remove the element from the DOM if it was already present...
-    // in case the element being added is already a child of this root,
-    // we need to insert the element, otherwise, just set
-    // it at the requested index.
-    final oldElement = _getElementAt(index);
     final element = _asElement(item);
     bool isChild = element.parent == _root;
     element.remove();
@@ -112,9 +144,6 @@ class Container<W> extends ListMixin<W> with Widget {
       _root.children.insert(index, element);
     } else {
       _root.children[index] = element;
-    }
-    if (oldElement != null) {
-      _itemById.remove(oldElement.getAttribute(idAttribute));
     }
     _store(element, item);
   }
@@ -146,14 +175,11 @@ class Container<W> extends ListMixin<W> with Widget {
     }
     var itemsToRemove = length - newLength;
     while (itemsToRemove > 0) {
-      final removedElement = _root.children.removeLast();
-      if (removedElement.hasAttribute(idAttribute)) {
-        _itemById.remove(removedElement.getAttribute(idAttribute));
-      }
+      _root.children.removeLast();
       itemsToRemove--;
     }
     assert(
-    length == newLength, "New length: $newLength, Current length: $length");
+        length == newLength, "New length: $newLength, Current length: $length");
   }
 
   Element _asElement(item) {
@@ -162,8 +188,7 @@ class Container<W> extends ListMixin<W> with Widget {
     } else if (item is Element) {
       return item;
     } else {
-      return SpanElement()
-        ..text = item?.toString() ?? "";
+      return SpanElement()..text = item?.toString() ?? "";
     }
   }
 
@@ -176,8 +201,14 @@ class Container<W> extends ListMixin<W> with Widget {
   }
 
   void _store(Element element, W item) {
-    final id = randomString();
-    element.setAttribute(idAttribute, id);
+    final currentId = _idOf(element);
+    String id;
+    if (currentId == null) {
+      id = randomString();
+      element.setAttribute(idAttribute, id);
+    } else {
+      id = currentId;
+    }
     _itemById[id] = item;
   }
 }

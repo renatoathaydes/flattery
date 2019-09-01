@@ -26,4 +26,7 @@ class Text with Widget {
 
   /// Set the text of this [Text].
   set text(String text) => root.text = text;
+
+  @override
+  String toString() => 'Text{${root.text}}';
 }

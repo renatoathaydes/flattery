@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:flattery/src/util/util.dart';
+import 'package:test/test.dart';
 
 main() async {
   group('Random Strings', () {
@@ -13,4 +13,8 @@ main() async {
       }
     });
   });
+}
+
+Future<void> nextEventLoopCycle() async {
+  await Future(() {});
 }
