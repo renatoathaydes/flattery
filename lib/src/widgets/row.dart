@@ -57,7 +57,10 @@ class Row with Widget {
       {List<Widget> children,
       JustifyContent justify = JustifyContent.start,
       AlignItems align = AlignItems.start,
-      bool allowWrap = false}) {
+      bool allowWrap = false,
+      List<String> classes = const []}) {
+    this.classes.addAll(classes);
+
     root.style
       ..display = 'flex'
       ..flexFlow = 'row${allowWrap ? ' wrap' : ''}'

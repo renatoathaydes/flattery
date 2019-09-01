@@ -6,7 +6,12 @@ import '../widget.dart';
 class Button with Widget {
   final root = ButtonElement();
 
-  Button({String id, String text = '', Function(MouseEvent) onClick}) {
+  Button(
+      {String id,
+      String text = '',
+      Function(MouseEvent) onClick,
+      List<String> classes = const []}) {
+    this.classes.addAll(classes);
     if (id != null) {
       root.id = id;
     }

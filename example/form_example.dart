@@ -34,6 +34,7 @@ class TextCountForm extends TextCount with Widget, ShadowWidget {
 
   @override
   Element build() => Container(
+        classes: ['text-box-form'],
         children: [
           inputWidget(_textInput, 'Text:'),
           inputWidget(_countInput, 'Number of Widgets to display:'),
@@ -45,8 +46,7 @@ class TextCountForm extends TextCount with Widget, ShadowWidget {
           _boxes
         ],
         rootFactory: flexBox,
-      ).root
-        ..classes.add('text-box-form');
+      ).root;
 
   set text(String text) {
     super.text = text;

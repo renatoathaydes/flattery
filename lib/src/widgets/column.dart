@@ -32,7 +32,10 @@ class Column with Widget {
     ColumnAlignment defaultAlignment,
     List<ColumnAlignment> childrenAlignments = const [],
     String width,
+    List<String> classes = const [],
   }) {
+    this.classes.addAll(classes);
+
     root.style
       ..display = 'grid'
       ..gridTemplateRows = _templateRows(children.length, lineHeights);

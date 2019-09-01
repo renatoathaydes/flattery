@@ -10,7 +10,9 @@ class Text with Widget {
   final root = DivElement();
 
   /// Create a [Text].
-  Text(String text, {String id}) {
+  Text(String text, {String id, List<String> classes = const []}) {
+    this.classes.addAll(classes);
+
     root
       ..style.textAlign = 'center'
       ..style.overflow = 'hidden'

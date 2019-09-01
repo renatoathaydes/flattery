@@ -15,7 +15,9 @@ class Checkbox with Widget {
       {String id = '',
       String label = '',
       bool checked = false,
-      Function(bool) onChange}) {
+      Function(bool) onChange,
+      List<String> classes = const []}) {
+    this.classes.addAll(classes);
     if (id != null) {
       _input.id = id;
       _input.name = id;

@@ -12,7 +12,10 @@ class Rectangle with Widget {
       String top = '0',
       String left = '0',
       String fill = 'white',
-      String border = 'solid black 1px'}) {
+      String border = 'solid black 1px',
+      List<String> classes = const []}) {
+    this.classes.addAll(classes);
+
     root.style
       ..width = width
       ..height = height

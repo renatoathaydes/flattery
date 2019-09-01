@@ -70,7 +70,7 @@ class Gallery with Widget, ShadowWidget {
   }
 }
 
-Widget header(String text) => Text(text)..root.classes.add('grid-header');
+Widget header(String text) => Text(text)..classes.add('grid-header');
 
 Widget square(String color) => Rectangle.square(size: '2em', fill: color);
 

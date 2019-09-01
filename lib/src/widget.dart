@@ -10,7 +10,11 @@ Widget widget(Element element) => _BasicWidget(element);
 ///
 /// It makes it possible to create user interfaces declaratively, using Dart.
 mixin Widget {
+  /// CSS style of this [Widget].
   CssStyleDeclaration get style => root.style;
+
+  /// CSS classes of this [Widget].
+  CssClassSet get classes => root.classes;
 
   /// Remove this [Widget] from the DOM.
   ///

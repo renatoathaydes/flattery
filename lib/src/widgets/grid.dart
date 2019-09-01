@@ -33,9 +33,11 @@ class Grid with Widget {
     List<String> rowHeights = const [],
     List<String> columnWidths = const [],
     List<List<Widget>> children = const [],
+    List<String> classes = const [],
     String rowGap,
     String columnGap,
   }) {
+    this.classes.addAll(classes);
     final rowCount = children.length;
     final columnCount =
         children.fold<int>(0, (acc, child) => max(acc, child.length));

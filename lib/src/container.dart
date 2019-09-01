@@ -29,8 +29,10 @@ class Container<W> extends ListMixin<W> with Widget {
 
   Container(
       {List<W> children = const [],
-      Element Function() rootFactory = _defaultRoot})
+      Element Function() rootFactory = _defaultRoot,
+      List<String> classes = const []})
       : _root = rootFactory() {
+    this.classes.addAll(classes);
     final observer = MutationObserver(_onMutation);
     observer.observe(_root, childList: true);
     addAll(children);
