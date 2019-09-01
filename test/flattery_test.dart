@@ -330,6 +330,46 @@ main() async {
       expect(addedItems, isEmpty);
       expect(removedItems, equals([widget1]));
     });
+
+    test('lets Observers be added then removed', () async {
+      await nextEventLoopCycle();
+
+      final addedItems1 = [];
+      final removedItems1 = [];
+      final addedItems2 = [];
+      final removedItems2 = [];
+
+      ContainerObserver obs1 = (added, removed) {
+        addedItems1.addAll(added);
+        removedItems1.addAll(removed);
+      };
+      ContainerObserver obs2 = (added, removed) {
+        addedItems2.addAll(added);
+        removedItems2.addAll(removed);
+      };
+      container.addObserver(obs1);
+      container.addObserver(obs2);
+
+      final hello = Text('hello');
+      container.add(hello);
+      await nextEventLoopCycle();
+
+      expect(addedItems1, equals([hello]));
+      expect(addedItems2, equals([hello]));
+      expect(removedItems1, isEmpty);
+      expect(removedItems2, isEmpty);
+
+      container.removeObserver(obs2);
+
+      final bye = Text('bye');
+      container.add(bye);
+      await nextEventLoopCycle();
+
+      expect(addedItems1, equals([hello, bye]));
+      expect(addedItems2, equals([hello]));
+      expect(removedItems1, isEmpty);
+      expect(removedItems2, isEmpty);
+    });
   });
 }
 
@@ -358,6 +398,4 @@ class _ExampleSimpleTypeWidget extends _ExampleSimpleType
   String toString() {
     return '_ExampleSimpleTypeWidget{$value}';
   }
-
-
 }
